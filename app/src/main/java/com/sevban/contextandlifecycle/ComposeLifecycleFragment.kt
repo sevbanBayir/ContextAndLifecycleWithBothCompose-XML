@@ -1,10 +1,14 @@
 package com.sevban.contextandlifecycle
 
+
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,7 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -53,13 +57,35 @@ class ComposeLifecycleFragment : Fragment() {
         return view
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.i(TAG, "onViewCreated in Compose Fragment")
 
+        val timerState =  mutableStateOf(0)
+
         binding.composeView.apply {
             setContent {
                 MaterialTheme {
+/*                    SideEffect {
+                        timerState.value++
+                    }*/
+
+
+                    timerState.value++
+
+/*                    LaunchedEffect(key1 = timerState) {
+                        while (true) {
+                            delay(1000)
+                            timerState.value++
+                        }
+                    }*/
+
+/*                    val animatable = remember { Animatable(0f) }
+                    LaunchedEffect(key1 = true) {
+                        animatable.animateTo(1f, animationSpec = tween(durationMillis = 5_000))
+                    }*/
+
                     setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
                     DisposableEffectWithLifecycle(
                         onResume = {
@@ -112,9 +138,24 @@ class ComposeLifecycleFragment : Fragment() {
                         ),
                         horizontalAlignment = CenterHorizontally
                     ) {
+
+/*                        item {
+                            Text(text = animatable.value.toString())
+                        }*/
                         item {
                             Button(onClick = { showDialog = !showDialog }) {
                                 Text(text = "Show dialog")
+                            }
+                        }
+                        item {
+                            //Text gösterilmiyorken de side effect oluyor.
+                            //Yani text bu state'i okumasın ama yine de sayımız artıyor
+                            //ancak recomposition sayısı güncellenmiyor bu sırada.
+                            Text("Current time: ${timerState.value}")
+                            Button(onClick = {
+                                timerState.value++
+                            }) {
+                                Text("Increment timer")
                             }
                         }
                         items(5) {
@@ -134,6 +175,7 @@ class ComposeLifecycleFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        _binding = null
         Log.i(TAG, "onDestroy in Compose Fragment")
     }
 
@@ -159,7 +201,8 @@ fun DisposableEffectWithLifecycle(
     onDestroy: () -> Unit = {},
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 ) {
-    val currentOnCreate by rememberUpdatedState(onCreate)
+    val currentOnCreate by rememberUpdatedState(onCreate)//rememberUpdatedState is used to lambdas given not to
+                                                         //be changed even they are updated.
     val currentOnStart by rememberUpdatedState(onStart)
     val currentOnStop by rememberUpdatedState(onStop)
     val currentOnResume by rememberUpdatedState(onResume)

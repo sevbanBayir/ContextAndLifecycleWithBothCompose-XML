@@ -1,7 +1,10 @@
 package com.sevban.contextandlifecycle
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.sevban.contextandlifecycle.databinding.ActivityMainBinding
 
@@ -16,6 +19,38 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
         Log.i(TAG, "onCreate in MainActivity")
 
+        //Activity context because its tied to UI but application context is not.
+        //Note: Normal dialogs don't get our activity to pause state BUT Permission Dialogs does.
+        val builder = AlertDialog.Builder(this)
+        builder.apply {
+            setMessage("Sample activity dialog message")
+            setPositiveButton(
+                "OK"
+            ) { dialog, id -> }
+        }
+        builder.create().show()
+
+        // Accessing shared preferences using the application context
+        val sharedPreferences = this.getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
+        sharedPreferences.edit().putString("name","sevban").apply()
+
+        val name = sharedPreferences.getString("name","")
+        Toast.makeText(this, "Name: $name", Toast.LENGTH_LONG).show()
+
+        //Application context can be used in a situation which a singleton is used that needs a context
+        //we MUST pass app context to that bcs
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Thread.sleep(5000)
+        Log.i(TAG, "onStart in MainActivity")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.i(TAG, "onResume in MainActivity")
     }
 
     override fun onPause() {

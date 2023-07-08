@@ -40,6 +40,11 @@ class FragmentLifecycleExample : Fragment() {
 
         Log.i(TAG, "onViewCreated")
     }
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+        Log.i(TAG, "onDestroy")
+    }
 
     override fun onPause() {
         super.onPause()
