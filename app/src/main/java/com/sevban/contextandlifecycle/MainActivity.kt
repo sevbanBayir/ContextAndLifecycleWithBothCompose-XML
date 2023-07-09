@@ -1,11 +1,13 @@
 package com.sevban.contextandlifecycle
 
+import android.Manifest
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.sevban.contextandlifecycle.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -30,11 +32,18 @@ class MainActivity : AppCompatActivity() {
         }
         builder.create().show()
 
+        //Get activity to onPause() state.
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+            100
+        )
+
         // Accessing shared preferences using the application context
         val sharedPreferences = this.getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
-        sharedPreferences.edit().putString("name","sevban").apply()
+        sharedPreferences.edit().putString("name", "sevban").apply()
 
-        val name = sharedPreferences.getString("name","")
+        val name = sharedPreferences.getString("name", "")
         Toast.makeText(this, "Name: $name", Toast.LENGTH_LONG).show()
 
         //Application context can be used in a situation which a singleton is used that needs a context
@@ -44,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        Thread.sleep(5000)
+        //Thread.sleep(5000)
         Log.i(TAG, "onStart in MainActivity")
     }
 
