@@ -92,7 +92,7 @@ class ComposeLifecycleFragment : Fragment() {
                             Log.i(TAG, "onResume in Compose View")
                         },
                         onCreate = {
-                            Log.i(TAG, "onCreate in Compose View")
+                            Log.i(TAG, "onCreate in  Compose View")
                         },
                         onDestroy = {
                             Log.i(TAG, "onDestroy in Compose View")
