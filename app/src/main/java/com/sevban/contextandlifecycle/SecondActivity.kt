@@ -1,34 +1,22 @@
 package com.sevban.contextandlifecycle
 
-import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
-import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import com.sevban.contextandlifecycle.databinding.ActivityMainBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.seconds
+import com.sevban.contextandlifecycle.databinding.ActivitySecondBinding
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
-    private val TAG = "First Activity"
+class SecondActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivitySecondBinding
+    private val TAG = "Second activity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivitySecondBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
         Log.i(TAG, "onCreate")
 
-        binding.navigateToComposeScreen.setOnClickListener {
-            //Intent requires application context, not activity context.
-            startActivity(Intent(applicationContext, SecondActivity::class.java))
-        }
     }
 
     override fun onStart() {
@@ -52,13 +40,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        Log.i(TAG, "onDestroy")
         super.onDestroy()
+        Log.i(TAG, "onDestroy")
     }
 
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
-        //Called when user intentionally leaved the activity.
         Log.i(TAG, "onLeaveHint")
     }
 

@@ -167,6 +167,11 @@ class ComposeLifecycleFragment : Fragment() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.i(TAG, "onStart in Compose Fragment")
+    }
+
     override fun onResume() {
         super.onResume()
         Log.i(TAG, "onResume in Compose Fragment")
@@ -184,10 +189,7 @@ class ComposeLifecycleFragment : Fragment() {
         Log.i(TAG, "onPause in Compose Fragment")
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.i(TAG, "onStart in Compose Fragment")
-    }
+
 
 }
 
@@ -202,7 +204,7 @@ fun DisposableEffectWithLifecycle(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 ) {
     val currentOnCreate by rememberUpdatedState(onCreate)//rememberUpdatedState is used to lambdas given not to
-                                                         //be changed even they are updated.
+                                                         //be restarted across recompositions.
     val currentOnStart by rememberUpdatedState(onStart)
     val currentOnStop by rememberUpdatedState(onStop)
     val currentOnResume by rememberUpdatedState(onResume)
