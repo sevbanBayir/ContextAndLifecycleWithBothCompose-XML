@@ -26,8 +26,8 @@ class MainActivity : AppCompatActivity() {
         Log.i(TAG, "onCreate")
 
         binding.navigateToComposeScreen.setOnClickListener {
-            //Intent requires application context, not activity context.
-            startActivity(Intent(applicationContext, SecondActivity::class.java))
+
+            startActivity(Intent(this, SecondActivity::class.java))
         }
     }
 
