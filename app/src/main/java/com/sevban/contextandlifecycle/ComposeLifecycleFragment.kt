@@ -71,7 +71,7 @@ class ComposeLifecycleFragment : Fragment() {
                         timerState.value++
                     }*/
 
-
+                    //Side effect !!!
                     timerState.value++
 
 /*                    LaunchedEffect(key1 = timerState) {
