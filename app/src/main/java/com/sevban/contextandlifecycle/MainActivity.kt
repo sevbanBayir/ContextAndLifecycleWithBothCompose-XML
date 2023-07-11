@@ -1,18 +1,13 @@
 package com.sevban.contextandlifecycle
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
-import android.view.View
-import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
+import androidx.core.app.ActivityCompat
 import com.sevban.contextandlifecycle.databinding.ActivityMainBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.seconds
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -26,8 +21,33 @@ class MainActivity : AppCompatActivity() {
         Log.i(TAG, "onCreate")
 
         binding.navigateToComposeScreen.setOnClickListener {
-
+            //What does "if you pass application context to an intent which
+            //is used to start an activity that means you lose your theme min. 12:13" mean??
             startActivity(Intent(this, SecondActivity::class.java))
+        }
+
+        binding.showPermissionDialog.setOnClickListener {
+            //Get activity to onPause() state with a permission dialog.
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                100
+            )
+        }
+
+        binding.showNormalDialog.setOnClickListener {
+            //Activity context because its tied to UI but application context is not.
+            //Note: Normal dialogs don't get our activity to pause state BUT Permission Dialogs does.
+            AlertDialog.Builder(this)
+                .apply {
+                    setMessage("Sample activity dialog message")
+                    setPositiveButton(
+                        "OK"
+                    ) { dialog, id ->
+                        startActivity(Intent(applicationContext, SecondActivity::class.java))
+                    }
+                }.create().show()
+
         }
     }
 

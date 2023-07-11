@@ -62,29 +62,12 @@ class ComposeLifecycleFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.i(TAG, "onViewCreated in Compose Fragment")
 
-        val timerState =  mutableStateOf(0)
+
 
         binding.composeView.apply {
             setContent {
                 MaterialTheme {
-/*                    SideEffect {
-                        timerState.value++
-                    }*/
-
-                    //Side effect !!!
-                    timerState.value++
-
-/*                    LaunchedEffect(key1 = timerState) {
-                        while (true) {
-                            delay(1000)
-                            timerState.value++
-                        }
-                    }*/
-
-/*                    val animatable = remember { Animatable(0f) }
-                    LaunchedEffect(key1 = true) {
-                        animatable.animateTo(1f, animationSpec = tween(durationMillis = 5_000))
-                    }*/
+                    val timerState = remember { mutableStateOf(0) }
 
                     setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
                     DisposableEffectWithLifecycle(
@@ -114,7 +97,7 @@ class ComposeLifecycleFragment : Fragment() {
                             onDismissRequest = { showDialog = !showDialog },
                         ) {
                             Surface {
-                                Column (
+                                Column(
                                     modifier = Modifier.fillMaxWidth(),
                                     verticalArrangement = Arrangement.spacedBy(
                                         32.dp,
@@ -130,6 +113,13 @@ class ComposeLifecycleFragment : Fragment() {
                             }
                         }
 
+                    //This is a side-effect because when user clicks the button below to increment
+                    //the value, all places that reads this state will be updated. Since here we
+                    //read that state here it also fires off this line and once this line is fired off
+                    //it causes an infinite recomposition. This can be simply explained by that this line
+                    //knows nothing about the lifecycle of that composable.
+                    timerState.value++
+
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.spacedBy(
@@ -139,14 +129,12 @@ class ComposeLifecycleFragment : Fragment() {
                         horizontalAlignment = CenterHorizontally
                     ) {
 
-/*                        item {
-                            Text(text = animatable.value.toString())
-                        }*/
                         item {
                             Button(onClick = { showDialog = !showDialog }) {
                                 Text(text = "Show dialog")
                             }
                         }
+
                         item {
                             //Text gösterilmiyorken de side effect oluyor.
                             //Yani text bu state'i okumasın ama yine de sayımız artıyor
@@ -190,7 +178,6 @@ class ComposeLifecycleFragment : Fragment() {
     }
 
 
-
 }
 
 @Composable
@@ -204,7 +191,7 @@ fun DisposableEffectWithLifecycle(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 ) {
     val currentOnCreate by rememberUpdatedState(onCreate)//rememberUpdatedState is used to lambdas given not to
-                                                         //be restarted across recompositions.
+    //be restarted across recompositions.
     val currentOnStart by rememberUpdatedState(onStart)
     val currentOnStop by rememberUpdatedState(onStop)
     val currentOnResume by rememberUpdatedState(onResume)
