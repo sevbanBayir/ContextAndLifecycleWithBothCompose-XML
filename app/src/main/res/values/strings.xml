@@ -5,4 +5,8 @@
     <string name="sample_compose_dialog_message">Sample compose dialog message</string>
     <string name="increment_counter_button_cd">Increment counter</string>
     <string name="increment_counter">Increment counter</string>
+    <string name="show_dialog">Show dialog</string>
+    <string name="show_dialogbutton_cd">Show dialog</string>
+    <string name="ok">OK</string>
+    <string name="ok_cd">OK</string>
 </resources>

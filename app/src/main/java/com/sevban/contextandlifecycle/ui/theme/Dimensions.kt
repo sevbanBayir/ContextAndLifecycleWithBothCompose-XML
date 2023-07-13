@@ -13,7 +13,8 @@ data class Dimensions(
     val defaultValue: Dp = 0.dp,
     val genericComponentSpacing: Dp = 32.dp,
     val mediumCornerRadius: Dp = 8.dp,
-    val leadingIconSpacing : Dp = 4.dp
+    val leadingIconSpacing : Dp = 4.dp,
+    val cardElevation: Dp = 8.dp
 )
 
 data class TextSize (
