@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Context And Lifecycle</string>
+    <string name="sample_compose_dialog_message">Örnek Compose diyalog mesajı</string>
+    <string name="increment_counter_button_cd">Sayacı artır</string>
+</resources>

@@ -6,38 +6,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
 import com.sevban.contextandlifecycle.databinding.FragmentComposeLifecycleBinding
+import com.sevban.contextandlifecycle.ui.theme.ContextAndLifecycleTheme
+import com.sevban.contextandlifecycle.components.ComposeDialog
+import com.sevban.contextandlifecycle.components.DisposableEffectWithLifecycle
+import com.sevban.contextandlifecycle.components.LazyColumnWithAnimation
 
 private val TAG = "ComposeLifecycleFragment"
 
@@ -62,13 +41,15 @@ class ComposeLifecycleFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.i(TAG, "onViewCreated in Compose Fragment")
 
+        bindViews()
+    }
 
-
+    private fun bindViews() {
         binding.composeView.apply {
             setContent {
-                MaterialTheme {
+                ContextAndLifecycleTheme {
+                    var showDialog by remember { mutableStateOf(false) }
                     val timerState = remember { mutableStateOf(0) }
-
                     setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
                     DisposableEffectWithLifecycle(
                         onResume = {
@@ -91,65 +72,26 @@ class ComposeLifecycleFragment : Fragment() {
                         }
                     )
 
-                    var showDialog by remember { mutableStateOf(false) }
                     if (showDialog)
-                        Dialog(
-                            onDismissRequest = { showDialog = !showDialog },
-                        ) {
-                            Surface {
-                                Column(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    verticalArrangement = Arrangement.spacedBy(
-                                        32.dp,
-                                        Alignment.CenterVertically
-                                    ),
-                                    horizontalAlignment = CenterHorizontally
-                                ) {
-                                    Text(text = "Sample compose dialog text")
-                                    Button(onClick = { showDialog = !showDialog }) {
-                                        Text(text = "OK")
-                                    }
-                                }
-                            }
-                        }
+                        ComposeDialog(
+                            onDismiss = { showDialog = !showDialog },
+                            onClickOKButton = { showDialog = !showDialog }
+                        )
 
-                    //This is a side-effect because when user clicks the button below to increment
-                    //the value, all places that reads this state will be updated. Since here we
-                    //read that state here it also fires off this line and once this line is fired off
-                    //it causes an infinite recomposition. This can be simply explained by that this line
-                    //knows nothing about the lifecycle of that composable.
+                    /**This is a side-effect because when user clicks the button below to increment
+                    the value, all places that reads this state will be updated. Since here we
+                    read that state here it also fires off this line and once this line is fired off
+                    it causes an infinite recomposition. This can be simply explained by that this line
+                    knows nothing about the lifecycle of that composable.*/
+
                     timerState.value++
-
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.spacedBy(
-                            32.dp,
-                            Alignment.CenterVertically
-                        ),
-                        horizontalAlignment = CenterHorizontally
-                    ) {
-
-                        item {
-                            Button(onClick = { showDialog = !showDialog }) {
-                                Text(text = "Show dialog")
-                            }
-                        }
-
-                        item {
-                            //Text gösterilmiyorken de side effect oluyor.
-                            //Yani text bu state'i okumasın ama yine de sayımız artıyor
-                            //ancak recomposition sayısı güncellenmiyor bu sırada.
-                            Text("Current time: ${timerState.value}")
-                            Button(onClick = {
-                                timerState.value++
-                            }) {
-                                Text("Increment timer")
-                            }
-                        }
-                        items(5) {
-                            Text(text = "This is Compose View", fontWeight = FontWeight.Bold)
-                        }
-                    }
+                    LazyColumnWithAnimation(
+                        timerState = timerState.value,
+                        onClickShowDialogButton = {//b&w background, rounded corner 6-8dp, //leadingIcon
+                            showDialog = !showDialog
+                        },
+                        onClickIncrementCountButton = { timerState.value++ }
+                    )
                 }
             }
         }
@@ -176,43 +118,6 @@ class ComposeLifecycleFragment : Fragment() {
         super.onPause()
         Log.i(TAG, "onPause in Compose Fragment")
     }
-
-
 }
 
-@Composable
-fun DisposableEffectWithLifecycle(
-    onCreate: () -> Unit = {},
-    onStart: () -> Unit = {},
-    onStop: () -> Unit = {},
-    onResume: () -> Unit = {},
-    onPause: () -> Unit = {},
-    onDestroy: () -> Unit = {},
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
-) {
-    val currentOnCreate by rememberUpdatedState(onCreate)//rememberUpdatedState is used to lambdas given not to
-    //be restarted across recompositions.
-    val currentOnStart by rememberUpdatedState(onStart)
-    val currentOnStop by rememberUpdatedState(onStop)
-    val currentOnResume by rememberUpdatedState(onResume)
-    val currentOnPause by rememberUpdatedState(onPause)
-    val currentOnDestroy by rememberUpdatedState(onDestroy)
 
-    DisposableEffect(lifecycleOwner) {
-        val lifecycleEventObserver = LifecycleEventObserver { _, event ->
-            when (event) {
-                Lifecycle.Event.ON_CREATE -> currentOnCreate()
-                Lifecycle.Event.ON_START -> currentOnStart()
-                Lifecycle.Event.ON_PAUSE -> currentOnPause()
-                Lifecycle.Event.ON_RESUME -> currentOnResume()
-                Lifecycle.Event.ON_STOP -> currentOnStop()
-                Lifecycle.Event.ON_DESTROY -> currentOnDestroy()
-                else -> {}
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(lifecycleEventObserver)
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(lifecycleEventObserver)
-        }
-    }
-}

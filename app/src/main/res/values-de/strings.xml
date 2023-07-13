@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Context And Lifecycle</string>
+    <string name="sample_compose_dialog_message">Beispiel für eine Dialognachricht zum Verfassen</string>
+    <string name="increment_counter_button_cd">Zähler erhöhen</string>
+</resources>

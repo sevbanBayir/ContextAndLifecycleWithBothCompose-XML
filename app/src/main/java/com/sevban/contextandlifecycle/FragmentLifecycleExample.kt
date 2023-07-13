@@ -11,7 +11,7 @@ import com.sevban.contextandlifecycle.databinding.FragmentLifecycleExampleBindin
 
 class FragmentLifecycleExample : Fragment() {
     private var _binding: FragmentLifecycleExampleBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding!! //
     private val TAG = "FragmentLifeCycleExample"
 
     override fun onCreateView(
@@ -20,15 +20,14 @@ class FragmentLifecycleExample : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentLifecycleExampleBinding.inflate(inflater, container, false)
-        val view = binding.root
 
         Log.i(TAG, "onCreateView")
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+//sadeleştir
         binding.navigateToComposeScreen.setOnClickListener {
             val action = FragmentLifecycleExampleDirections.actionFragmentLifecycleExampleToComposeLifecycleFragment()
             findNavController().navigate(action)
@@ -40,6 +39,7 @@ class FragmentLifecycleExample : Fragment() {
 
         Log.i(TAG, "onViewCreated")
     }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null

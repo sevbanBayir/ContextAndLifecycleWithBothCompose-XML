@@ -20,6 +20,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
         Log.i(TAG, "onCreate")
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.i(TAG, "onStart")
+        //sadeleştir- onStarta taşı
         binding.navigateToComposeScreen.setOnClickListener {
             //What does "if you pass application context to an intent which
             //is used to start an activity that means you lose your theme min. 12:13" mean??
@@ -47,13 +53,7 @@ class MainActivity : AppCompatActivity() {
                         startActivity(Intent(applicationContext, SecondActivity::class.java))
                     }
                 }.create().show()
-
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.i(TAG, "onStart")
     }
 
     override fun onResume() {
