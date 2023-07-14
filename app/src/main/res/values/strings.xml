@@ -9,4 +9,8 @@
     <string name="show_dialogbutton_cd">Show dialog</string>
     <string name="ok">OK</string>
     <string name="ok_cd">OK</string>
+    <string name="unfavourite">Unfavourite</string>
+    <string name="favourite">Favourite</string>
+    <string name="activate_list_action">Activate list item action</string>
+    <string name="favourite_button">Favourite button</string>
 </resources>

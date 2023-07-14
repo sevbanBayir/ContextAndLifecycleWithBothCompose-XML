@@ -6,14 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,11 +16,8 @@ import androidx.fragment.app.Fragment
 import com.sevban.contextandlifecycle.components.ComposeDialog
 import com.sevban.contextandlifecycle.components.DisposableEffectWithLifecycle
 import com.sevban.contextandlifecycle.components.LazyColumnWithAnimation
-import com.sevban.contextandlifecycle.components.textList
 import com.sevban.contextandlifecycle.databinding.FragmentComposeLifecycleBinding
 import com.sevban.contextandlifecycle.ui.theme.ContextAndLifecycleTheme
-import com.sevban.contextandlifecycle.ui.theme.textSize
-import kotlin.math.roundToInt
 
 private val TAG = "ComposeLifecycleFragment"
 
@@ -60,7 +50,6 @@ class ComposeLifecycleFragment : Fragment() {
             setContent {
                 ContextAndLifecycleTheme {
                     Surface {
-
 
                         var showDialog by remember { mutableStateOf(false) }
                         val timerState = remember { mutableStateOf(0) }
@@ -104,7 +93,8 @@ class ComposeLifecycleFragment : Fragment() {
                             onClickShowDialogButton = {//b&w background, rounded corner 6-8dp, //leadingIcon
                                 showDialog = !showDialog
                             },
-                            onClickIncrementCountButton = { timerState.value++ }
+                            onClickIncrementCountButton = { timerState.value++ },
+
                         )
                     }
                 }

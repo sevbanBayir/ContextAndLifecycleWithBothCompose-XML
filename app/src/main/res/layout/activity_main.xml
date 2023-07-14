@@ -11,6 +11,7 @@
         android:id="@+id/navigate_to_compose_screen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/mid_rounded_shape"
         android:text="Go to Another Activity"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

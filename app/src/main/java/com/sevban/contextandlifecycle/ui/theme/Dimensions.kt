@@ -3,7 +3,7 @@ package com.sevban.contextandlifecycle.ui.theme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -22,8 +22,8 @@ data class TextSize (
     val genericFontSize: TextUnit = 14.sp
 )
 
-val LocaDimension = compositionLocalOf { Dimensions() }
-val LocalTextSize = compositionLocalOf { TextSize() }
+val LocaDimension = staticCompositionLocalOf { Dimensions() }
+val LocalTextSize = staticCompositionLocalOf { TextSize() }
 
 val MaterialTheme.dimesions: Dimensions
     @Composable

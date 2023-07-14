@@ -32,6 +32,8 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, SecondActivity::class.java))
         }
 
+
+
         binding.showPermissionDialog.setOnClickListener {
             //Get activity to onPause() state with a permission dialog.
             ActivityCompat.requestPermissions(
