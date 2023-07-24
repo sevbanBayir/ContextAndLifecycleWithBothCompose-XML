@@ -1,4 +1,4 @@
-package com.sevban.contextandlifecycle
+package com.sevban.contextandlifecycle.presentation.views_fragment
 
 import android.app.AlertDialog
 import android.app.Dialog

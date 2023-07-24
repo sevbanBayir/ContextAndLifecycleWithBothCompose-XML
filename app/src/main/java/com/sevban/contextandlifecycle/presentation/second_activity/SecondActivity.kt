@@ -1,4 +1,4 @@
-package com.sevban.contextandlifecycle
+package com.sevban.contextandlifecycle.presentation.second_activity
 
 import android.os.Bundle
 import android.util.Log
@@ -16,7 +16,6 @@ class SecondActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
         Log.i(TAG, "onCreate")
-
     }
 
     override fun onStart() {

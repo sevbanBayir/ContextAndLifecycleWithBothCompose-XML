@@ -64,4 +64,14 @@ dependencies {
     implementation ("androidx.navigation:navigation-fragment-ktx:2.6.0")
     implementation ("androidx.navigation:navigation-ui-ktx:2.6.0")
 
+    //CameraX
+    val camerax_version = "1.2.3"
+    implementation ("androidx.camera:camera-core:${camerax_version}")
+    implementation ("androidx.camera:camera-lifecycle:${camerax_version}")
+    implementation ("androidx.camera:camera-view:${camerax_version}")
+    implementation ("androidx.camera:camera-extensions:${camerax_version}")
+
+    //Coil
+    implementation ("io.coil-kt:coil-compose:2.4.0")
+
 }

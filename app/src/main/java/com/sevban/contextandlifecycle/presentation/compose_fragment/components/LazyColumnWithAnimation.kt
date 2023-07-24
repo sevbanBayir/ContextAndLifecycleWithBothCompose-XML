@@ -1,4 +1,4 @@
-package com.sevban.contextandlifecycle.components
+package com.sevban.contextandlifecycle.presentation.compose_fragment.components
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -18,19 +18,15 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.sevban.contextandlifecycle.R
 import com.sevban.contextandlifecycle.ui.theme.dimesions
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -40,14 +36,8 @@ fun LazyColumnWithAnimation(
     onClickShowDialogButton: () -> Unit,
     onClickIncrementCountButton: () -> Unit,
 ) {
-    var animatable = Animatable(0f)
-    var isLoading by remember { mutableStateOf(false) }
-    val corouteScope = rememberCoroutineScope()
-    LaunchedEffect(key1 = isLoading) {
-        delay(2.seconds)
-        isLoading = false
-    }
 
+    var isLoading by remember { mutableStateOf(false) }
     val pullRefreshState = rememberPullRefreshState(
         refreshing = isLoading,
         onRefresh = {
@@ -55,12 +45,18 @@ fun LazyColumnWithAnimation(
         }
     )
 
-    LaunchedEffect(key1 = true, key2 = isLoading) {
-        animatable.animateTo(1f, animationSpec = tween(durationMillis = 2_000))
+    LaunchedEffect(key1 = isLoading) {
+        delay(2.seconds)
+        isLoading = false
     }
-    Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
-        LazyColumn(//itemplacementanim & itemspecific anim for the first & + swipe refresh
 
+    val animatable = remember(isLoading) {Animatable(0f)}
+    LaunchedEffect(key1 = true, key2 = isLoading) {
+        animatable.animateTo(1f, animationSpec = tween(durationMillis = 3_000))
+    }
+
+    Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
+        LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(
                 MaterialTheme.dimesions.genericComponentSpacing,
@@ -79,9 +75,6 @@ fun LazyColumnWithAnimation(
             }
 
             item {
-                //Text gösterilmiyorken de side effect oluyor.
-                //Yani text bu state'i okumasın ama yine de sayımız artıyor
-                //ancak recomposition sayısı güncellenmiyor bu sırada.
                 Text("Current time: ${timerState}")
                 RoundedLeadingIconButton(
                     onClick = onClickIncrementCountButton,
@@ -104,13 +97,12 @@ fun LazyColumnWithAnimation(
                             text = "item $index",
                             isFavourited = isFavourited,
                             onClickFavButton = { isFavourited = !isFavourited }
-                        )//font-family roboto as default & 14sp default fontsize global
+                        )
                     }
                 }
 
             item {
                 CheckableRow()
-                //accessiblity appliance
             }
         }
         PullRefreshIndicator(

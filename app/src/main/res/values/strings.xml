@@ -13,4 +13,10 @@
     <string name="favourite">Favourite</string>
     <string name="activate_list_action">Activate list item action</string>
     <string name="favourite_button">Favourite button</string>
+    <string name="go_to_another_activity">Go to Another Activity</string>
+    <string name="show_permission_dialog">Show permission dialog</string>
+    <string name="show_normal_dialog">Show normal dialog</string>
+    <string name="navigate_to_compose_screen">Navigate to Compose Screen</string>
+    <string name="open_dialog">Open Dialog</string>
+    <string name="take_photo">Take Photo</string>
 </resources>

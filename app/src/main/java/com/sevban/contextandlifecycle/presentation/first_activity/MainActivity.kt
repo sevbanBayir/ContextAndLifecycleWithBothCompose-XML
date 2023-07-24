@@ -1,4 +1,4 @@
-package com.sevban.contextandlifecycle
+package com.sevban.contextandlifecycle.presentation.first_activity
 
 import android.Manifest
 import android.content.Intent
@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.sevban.contextandlifecycle.databinding.ActivityMainBinding
+import com.sevban.contextandlifecycle.presentation.second_activity.SecondActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -19,43 +20,12 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
         Log.i(TAG, "onCreate")
-
+        setViews()
     }
 
     override fun onStart() {
         super.onStart()
         Log.i(TAG, "onStart")
-        //sadeleştir- onStarta taşı
-        binding.navigateToComposeScreen.setOnClickListener {
-            //What does "if you pass application context to an intent which
-            //is used to start an activity that means you lose your theme min. 12:13" mean??
-            startActivity(Intent(this, SecondActivity::class.java))
-        }
-
-
-
-        binding.showPermissionDialog.setOnClickListener {
-            //Get activity to onPause() state with a permission dialog.
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-                100
-            )
-        }
-
-        binding.showNormalDialog.setOnClickListener {
-            //Activity context because its tied to UI but application context is not.
-            //Note: Normal dialogs don't get our activity to pause state BUT Permission Dialogs does.
-            AlertDialog.Builder(this)
-                .apply {
-                    setMessage("Sample activity dialog message")
-                    setPositiveButton(
-                        "OK"
-                    ) { dialog, id ->
-                        startActivity(Intent(applicationContext, SecondActivity::class.java))
-                    }
-                }.create().show()
-        }
     }
 
     override fun onResume() {
@@ -80,7 +50,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
-        //Called when user intentionally leaved the activity.
         Log.i(TAG, "onLeaveHint")
     }
 
@@ -91,7 +60,34 @@ class MainActivity : AppCompatActivity() {
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         Log.i(TAG, "onRestoreInstanceState")
-        //savedInstanceState.putString("stateToBeRestored", "myState")
         super.onRestoreInstanceState(savedInstanceState)
+    }
+
+    private fun setViews() {
+
+        binding.basketView.tvQuantity.text = "14"
+        binding.navigateToComposeScreen.setOnClickListener {
+            startActivity(Intent(this, SecondActivity::class.java))
+        }
+
+        binding.showPermissionDialog.setOnClickListener {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                100
+            )
+        }
+
+        binding.showNormalDialog.setOnClickListener {
+            AlertDialog.Builder(this)
+                .apply {
+                    setMessage("Sample activity dialog message")
+                    setPositiveButton(
+                        "OK"
+                    ) { dialog, id ->
+                        startActivity(Intent(applicationContext, SecondActivity::class.java))
+                    }
+                }.create().show()
+        }
     }
 }

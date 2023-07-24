@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/fragmentLifecycleExample">
+    app:startDestination="@id/cameraFragment">
 
     <fragment
         android:id="@+id/fragmentLifecycleExample"
-        android:name="com.sevban.contextandlifecycle.FragmentLifecycleExample"
+        android:name="com.sevban.contextandlifecycle.presentation.views_fragment.FragmentLifecycleExample"
         android:label="fragment_lifecycle_example"
         tools:layout="@layout/fragment_lifecycle_example" >
         <action
@@ -16,7 +16,15 @@
     </fragment>
     <fragment
         android:id="@+id/composeLifecycleFragment"
-        android:name="com.sevban.contextandlifecycle.ComposeLifecycleFragment"
+        android:name="com.sevban.contextandlifecycle.presentation.compose_fragment.ComposeLifecycleFragment"
         android:label="fragment_compose_lifecycle"
-        tools:layout="@layout/fragment_compose_lifecycle" />
+        tools:layout="@layout/fragment_compose_lifecycle" >
+        <action
+            android:id="@+id/action_composeLifecycleFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.sevban.contextandlifecycle.presentation.camera.CameraFragment"
+        android:label="CameraFragment" />
 </navigation>

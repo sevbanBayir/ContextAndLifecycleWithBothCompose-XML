@@ -1,4 +1,4 @@
-package com.sevban.contextandlifecycle.components
+package com.sevban.contextandlifecycle.presentation.compose_fragment.components
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding

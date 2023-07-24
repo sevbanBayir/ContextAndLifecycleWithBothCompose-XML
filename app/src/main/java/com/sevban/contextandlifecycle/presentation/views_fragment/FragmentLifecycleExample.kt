@@ -1,4 +1,4 @@
-package com.sevban.contextandlifecycle
+package com.sevban.contextandlifecycle.presentation.views_fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +11,7 @@ import com.sevban.contextandlifecycle.databinding.FragmentLifecycleExampleBindin
 
 class FragmentLifecycleExample : Fragment() {
     private var _binding: FragmentLifecycleExampleBinding? = null
-    private val binding get() = _binding!! //
+    private val binding get() = _binding!!
     private val TAG = "FragmentLifeCycleExample"
 
     override fun onCreateView(
@@ -20,28 +20,18 @@ class FragmentLifecycleExample : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentLifecycleExampleBinding.inflate(inflater, container, false)
-
         Log.i(TAG, "onCreateView")
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//sadeleştir
-        binding.navigateToComposeScreen.setOnClickListener {
-            val action = FragmentLifecycleExampleDirections.actionFragmentLifecycleExampleToComposeLifecycleFragment()
-            findNavController().navigate(action)
-        }
-
-        binding.openDialogBtn.setOnClickListener {
-            DialogFragmentExample().show(childFragmentManager, DialogFragmentExample.TAG)
-        }
-
+        setViews()
         Log.i(TAG, "onViewCreated")
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
         Log.i(TAG, "onDestroy")
     }
@@ -54,5 +44,18 @@ class FragmentLifecycleExample : Fragment() {
     override fun onStop() {
         super.onStop()
         Log.i(TAG, "onStop")
+    }
+
+    private fun setViews() {
+        binding.navigateToComposeScreen.setOnClickListener {
+            val action =
+                FragmentLifecycleExampleDirections.actionFragmentLifecycleExampleToComposeLifecycleFragment()
+            findNavController().navigate(action)
+        }
+
+        binding.openDialogBtn.setOnClickListener {
+            DialogFragmentExample().show(parentFragmentManager, DialogFragmentExample.TAG)
+        }
+
     }
 }

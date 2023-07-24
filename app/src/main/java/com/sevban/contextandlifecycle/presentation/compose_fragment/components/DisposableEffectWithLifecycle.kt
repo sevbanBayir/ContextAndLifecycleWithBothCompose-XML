@@ -1,4 +1,4 @@
-package com.sevban.contextandlifecycle.components
+package com.sevban.contextandlifecycle.presentation.compose_fragment.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect

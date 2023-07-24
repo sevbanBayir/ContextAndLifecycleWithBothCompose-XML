@@ -12,8 +12,16 @@ import com.sevban.contextandlifecycle.R
 val Montserrat = FontFamily(
     Font(R.font.montserrat_regular)
 )
+
+val Roboto = FontFamily(
+    Font(R.font.font_roboto_regular, weight = FontWeight.Normal),
+    Font(R.font.font_roboto_thin, weight = FontWeight.Thin),
+    Font(R.font.font_roboto_medium, weight = FontWeight.Medium),
+    Font(R.font.font_roboto_bold, weight = FontWeight.Bold),
+)
+
 val Typography = Typography(
-    defaultFontFamily = Montserrat,
+    defaultFontFamily = Roboto,
     body1 = TextStyle(
         fontFamily = Montserrat,
         fontWeight = FontWeight.Normal,
