@@ -35,8 +35,6 @@ fun ZoomableImage(
 
     var offset by remember { mutableStateOf(Offset.Zero) }
     var zoom by remember { mutableStateOf(1f) }
-    var animatable = remember { Animatable(0f) }
-    val coroutineScope = rememberCoroutineScope()
 
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Image(
@@ -48,14 +46,6 @@ fun ZoomableImage(
                 .pointerInput(Unit) {
                     detectTransformGestures(
                         panZoomLock = false,
-                        onDoubleTap = { tapOffset ->
-                            when (zoom) {
-                                1f -> zoom = 2f
-                                2f -> zoom = 3f
-                                3f -> zoom = 1f
-                            }
-                            offset = tapOffset
-                        },
                         onGesture = { gestureCentroid: Offset,
                                       gesturePan: Offset,
                                       gestureZoom: Float ->
@@ -79,8 +69,7 @@ fun ZoomableImage(
 
                     scaleX = zoom
                     scaleY = zoom
-                }
-                ,
+                },
         )
     }
 }

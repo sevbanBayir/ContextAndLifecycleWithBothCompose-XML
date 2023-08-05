@@ -74,4 +74,7 @@ dependencies {
     //Coil
     implementation ("io.coil-kt:coil-compose:2.4.0")
 
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.10")
+
+
 }

@@ -25,9 +25,11 @@ import kotlin.time.Duration.Companion.seconds
 class CameraFragment : Fragment() {
     private var _binding: FragmentCameraBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var cameraXManager: CameraXManager
     private var imageUriFromLambda: Uri? = null
     private var shouldShowImage by mutableStateOf(false)
+
     private val activityResultLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
@@ -81,7 +83,6 @@ class CameraFragment : Fragment() {
         //here, they actually used baseContext why ?
     }
 
-
     private fun setViews() {
         binding.imageCaptureButton.setOnClickListener {
 
@@ -103,8 +104,8 @@ class CameraFragment : Fragment() {
         }
 
         binding.composeImage.setContent {
-            LaunchedEffect(key1 = Unit) {
-                delay(10.seconds)
+            LaunchedEffect(key1 = Unit, shouldShowImage) {
+                delay(1033.seconds)
                 shouldShowImage = false
                 requireActivity().runOnUiThread {
                     binding.composeImage.visibility = View.GONE

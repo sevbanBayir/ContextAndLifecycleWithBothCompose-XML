@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.sevban.contextandlifecycle.databinding.FragmentComposeLifecycleBinding
 import com.sevban.contextandlifecycle.ui.theme.ContextAndLifecycleTheme
 
@@ -60,7 +61,12 @@ class ComposeLifecycleFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 ContextAndLifecycleTheme {
-                    ComposeLifecycleUI()
+                    ComposeLifecycleUI(
+                        navigate = {
+                            val action = ComposeLifecycleFragmentDirections.actionComposeLifecycleFragmentToCameraFragment()
+                            findNavController().navigate(action)
+                        }
+                    )
                 }
             }
         }

@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -13,6 +14,7 @@ import androidx.camera.core.Preview
 import androidx.camera.core.Preview.SurfaceProvider
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -21,11 +23,10 @@ import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class CameraXManagerImpl (
+class CameraXManagerImpl(
     private val context: Context,
     private val lifecycle: Lifecycle,
 ) : CameraXManager, DefaultLifecycleObserver {
-
     private lateinit var cameraExecutor: ExecutorService
     private var imageCapture: ImageCapture? = null
 
@@ -68,15 +69,6 @@ class CameraXManagerImpl (
         }, ContextCompat.getMainExecutor(context))
     }
 
-    private fun bindToLifecycle() {
-        if (lifecycle.currentState == Lifecycle.State.CREATED) {
-            lifecycle.addObserver(this)
-        }
-        if (lifecycle.currentState == Lifecycle.State.DESTROYED) {
-            lifecycle.removeObserver(this)
-        }
-    }
-
     override fun takePicture(
         onErrorImageCapturing: (Throwable) -> Unit,
         onImageSuccesfullyCaptured: (Uri) -> Unit
@@ -116,14 +108,23 @@ class CameraXManagerImpl (
         )
     }
 
-    companion object {
-        private const val TAG = "CameraXApp"
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+    private fun bindToLifecycle() {
+        if ((context as AppCompatActivity).lifecycle.currentState == Lifecycle.State.CREATED) {
+            lifecycle.addObserver(this)
+        }
+        if (lifecycle.currentState == Lifecycle.State.DESTROYED) {
+            lifecycle.removeObserver(this)
+        }
     }
 
     override fun onStop(owner: LifecycleOwner) {
         super.onStop(owner)
         cameraExecutor.shutdown()
+    }
+
+    companion object {
+        private const val TAG = "CameraXApp"
+        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
     }
 }
 

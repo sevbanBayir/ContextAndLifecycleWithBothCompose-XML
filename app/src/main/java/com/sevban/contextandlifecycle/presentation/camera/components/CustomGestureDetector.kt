@@ -15,7 +15,7 @@ import kotlin.math.abs
 suspend fun PointerInputScope.detectTransformGestures(
     panZoomLock: Boolean = false,
     onGesture: (centroid: Offset, pan: Offset, zoom: Float) -> Unit,
-    onDoubleTap: (Offset) -> Unit
+    onDoubleTap: ((Offset) -> Unit)? = null,
 ) {
     awaitEachGesture {
         var zoom = 1f
@@ -26,61 +26,57 @@ suspend fun PointerInputScope.detectTransformGestures(
 
         var pointerId = down.id
 
-        val doubleTap = awaitSecondDown(down)
-        if (doubleTap != null) {
-            onDoubleTap(doubleTap.position)
-        } else {
 
-            do {
-                val event = awaitPointerEvent()
+        do {
+            val event = awaitPointerEvent()
 
-                val canceled = event.changes.any { it.isConsumed }
+            val canceled = event.changes.any { it.isConsumed }
 
-                if (!canceled) {
+            if (!canceled) {
 
-                    val zoomChange = event.calculateZoom()
-                    val panChange = event.calculatePan()
+                val zoomChange = event.calculateZoom()
+                val panChange = event.calculatePan()
 
-                    if (!pastTouchSlop) {
-                        zoom *= zoomChange
-                        pan += panChange
+                if (!pastTouchSlop) {
+                    zoom *= zoomChange
+                    pan += panChange
 
-                        val centroidSize = event.calculateCentroidSize(useCurrent = false)
-                        val zoomMotion = abs(1 - zoom) * centroidSize
-                        val panMotion = pan.getDistance()
+                    val centroidSize = event.calculateCentroidSize(useCurrent = false)
+                    val zoomMotion = abs(1 - zoom) * centroidSize
+                    val panMotion = pan.getDistance()
 
-                        if (zoomMotion > touchSlop || panMotion > touchSlop) {
-                            pastTouchSlop = true
-                        }
-                    }
-
-                    if (pastTouchSlop) {
-                        val centroid = event.calculateCentroid(useCurrent = false)
-
-                        if (zoomChange != 1f || panChange != Offset.Zero) {
-                            onGesture(
-                                centroid,
-                                panChange,
-                                zoomChange,
-                            )
-                        }
-
-                        val cancel = event.changes.find {
-                            it.id.value == pointerId.value + 2 ||
-                                    it.id.value == pointerId.value + 1
-                        }
-
-                        zoom *= event.calculateZoom()
-                        if (cancel != null && doubleTap != null)
-                            event.changes.forEach {
-                                it.consume()
-                            }
-
+                    if (zoomMotion > touchSlop || panMotion > touchSlop) {
+                        pastTouchSlop = true
                     }
                 }
-            } while (!canceled && event.changes.any { it.pressed })
-        }
+
+                if (pastTouchSlop) {
+                    val centroid = event.calculateCentroid(useCurrent = false)
+
+                    if (zoomChange != 1f || panChange != Offset.Zero) {
+                        onGesture(
+                            centroid,
+                            panChange,
+                            zoomChange,
+                        )
+                    }
+
+                    val cancel = event.changes.find {
+                        it.id.value == pointerId.value + 2 ||
+                                it.id.value == pointerId.value + 1
+                    }
+
+                    zoom *= event.calculateZoom()
+                    if (cancel != null)
+                        event.changes.forEach {
+                            it.consume()
+                        }
+
+                }
+            }
+        } while (!canceled && event.changes.any { it.pressed })
     }
+
 }
 
 private suspend fun AwaitPointerEventScope.awaitSecondDown(

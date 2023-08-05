@@ -65,7 +65,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun setViews() {
 
-        binding.basketView.tvQuantity.text = "14"
         binding.navigateToComposeScreen.setOnClickListener {
             startActivity(Intent(this, SecondActivity::class.java))
         }

@@ -12,6 +12,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -35,6 +36,7 @@ fun LazyColumnWithAnimation(
     timerState: Int,
     onClickShowDialogButton: () -> Unit,
     onClickIncrementCountButton: () -> Unit,
+    navigate: () -> Unit,
 ) {
 
     var isLoading by remember { mutableStateOf(false) }
@@ -71,6 +73,15 @@ fun LazyColumnWithAnimation(
                     textResId = R.string.show_dialog,
                     contentDescription = R.string.show_dialogbutton_cd,
                     icon = Icons.Rounded.Warning
+                )
+            }
+
+            item {
+                RoundedLeadingIconButton(
+                    onClick = navigate,
+                    textResId = R.string.go_camera_fragment,
+                    contentDescription = R.string.go_camera_fragment,
+                    icon = Icons.Rounded.ArrowForward
                 )
             }
 

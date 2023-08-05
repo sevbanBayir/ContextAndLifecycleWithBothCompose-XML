@@ -14,7 +14,9 @@ import com.sevban.contextandlifecycle.presentation.compose_fragment.components.L
 private val TAG = "ComposeLifecycleFragment"
 
 @Composable
-fun ComposeLifecycleUI() {
+fun ComposeLifecycleUI(
+    navigate: () -> Unit,
+) {
     Surface {
 
         var showDialog by remember { mutableStateOf(false) }
@@ -30,7 +32,8 @@ fun ComposeLifecycleUI() {
         LazyColumnWithAnimation(
             timerState = timerState.value,
             onClickShowDialogButton = { showDialog = !showDialog },
-            onClickIncrementCountButton = { timerState.value++ }
+            onClickIncrementCountButton = { timerState.value++ },
+            navigate = navigate
         )
 
         DisposableEffectWithLifecycle(
