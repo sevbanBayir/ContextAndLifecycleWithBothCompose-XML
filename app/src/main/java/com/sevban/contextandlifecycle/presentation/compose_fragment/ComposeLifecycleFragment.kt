@@ -47,8 +47,12 @@ class ComposeLifecycleFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        _binding = null
         Log.i(TAG, "onDestroy in Compose Fragment")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onPause() {
